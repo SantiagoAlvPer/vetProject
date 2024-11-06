@@ -1,0 +1,7 @@
+{
+  "name": "veterinaryProject",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
