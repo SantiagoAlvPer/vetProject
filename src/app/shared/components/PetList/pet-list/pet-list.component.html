@@ -1,0 +1,10 @@
+<label for="petType">Tipo de mascota</label>
+<select id="petType" (change)="onPetTypeChange($event)">
+  <option value="perro">Perro</option>
+  <option value="gato">Gato</option>
+</select>
+
+<label for="breed">Raza</label>
+<select id="breed">
+  <option *ngFor="let breed of breeds" [value]="breed">{{ breed }}</option>
+</select>

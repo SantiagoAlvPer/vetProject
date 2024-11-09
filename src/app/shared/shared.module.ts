@@ -8,11 +8,17 @@ import { RouterLink } from '@angular/router';
 import { StorageService } from './services/storage/storage.service';
 import { AuthService } from './services/auth/auth.service';
 import { ButtonComponent } from './components/button/button.component';
+import { PetFormComponent } from './components/PetForm/pet-form/pet-form.component';
+import { PetServiceService } from './services/PetService/pet-service.service';
+import { PetListComponent } from './components/PetList/pet-list/pet-list.component';
+import { PetBreedService } from './services/PetBreedService/pet-breed-service.service';
 
 const Components = [
   InputComponent,
   CardComponent,
-  ButtonComponent
+  ButtonComponent,
+  PetFormComponent,
+  PetListComponent
 ];
 
 const Modules = [
@@ -26,6 +32,8 @@ const Modules = [
 const Providers = [
   StorageService,
   AuthService,
+  PetServiceService,
+  PetBreedService
   ];
 
 @NgModule({
