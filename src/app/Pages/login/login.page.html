@@ -2,9 +2,9 @@
   <body>
     <div class="container">
       <div class="heading">Sign In</div>
-      <form class="form">
-        <app-input type="email" label="Email" [fill]="'outline'" [placeholder]="'James@gmail.com'" ></app-input>
-        <app-input type="password" label="Password" [fill]="'outline'" [placeholder]="'**********'"></app-input>
+      <form class="form" fromGroup="loginForm" (ngSubmit)="onSubmit()">
+        <app-input  [control]="email" type="email" label="Email" [fill]="'outline'" [placeholder]="'James@gmail.com'" ></app-input>
+        <app-input [control]="password" type="password" label="Password" [fill]="'outline'" [placeholder]="'**********'"></app-input>
         <span class="forgot-password"><a href="#">Forgot Password ?</a></span>
         <app-button class="login-button" type="submit" value="Sign In"></app-button> 
       </form>
