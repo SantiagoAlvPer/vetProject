@@ -12,6 +12,7 @@ import { PetFormComponent } from './components/PetForm/pet-form/pet-form.compone
 import { PetServiceService } from './services/PetService/pet-service.service';
 import { PetListComponent } from './components/PetList/pet-list/pet-list.component';
 import { PetBreedService } from './services/PetBreedService/pet-breed-service.service';
+import { ToastService } from './controllers/toast/toast.service';
 
 const Components = [
   InputComponent,
@@ -29,6 +30,9 @@ const Modules = [
   RouterLink
 ];
 
+const Controlers = [ToastService]
+
+
 const Providers = [
   StorageService,
   AuthService,
@@ -39,7 +43,7 @@ const Providers = [
 @NgModule({
   declarations: [...Components],
   imports: [...Modules],
-  providers: [...Providers],
+  providers: [...Providers, ...Controlers],
   exports: [...Components, ...Modules],
 })
 export class SharedModule { }
