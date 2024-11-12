@@ -1,13 +1,56 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <body>
+    <div class="container">
+      <form >
+        <p class="heading">Register</p>
+        <ion-grid fixed>
+          <ion-row>
+            <ion-col size="12">
+              <p class="Messege">
+                Signup now and get full access to our app.
+              </p>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="6">
+              <app-input label="Name" type="text" [fill]="'outline'" [placeholder]="'James'"></app-input>
+            </ion-col>
+            <ion-col size="6">
+              <app-input label="LastName" type="text" [fill]="'outline'" [placeholder]="'Martinez'"></app-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="4">
+              <app-input label="Age" type="number" [fill]="'outline'" [placeholder]="'18'" ></app-input>
+            </ion-col>
+            <ion-col size="8">
+              <app-input label="Phone" type="number" [fill]="'outline'" [placeholder]="'000-0000-000'" ></app-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <app-input label="Email" type="email" [fill]="'outline'" [placeholder]="'James@gmail.com'"></app-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <app-input label="Password" type="password" [fill]="'outline'" [placeholder]="'***********'" ></app-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <app-button [value]="'Register'"></app-button>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12"  class="agreement">
+              <a [routerLink]="['login']" class="" >Already account?</a>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
+    </div>
+  </body>
 </ion-content>
+
+<span class="arrow"><a [routerLink]="['login']"><ion-icon slot="start" name="arrow-back"></ion-icon></a></span>
