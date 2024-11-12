@@ -8,6 +8,10 @@
         <span class="forgot-password"><a href="#">Forgot Password ?</a></span>
         <app-button class="login-button" type="submit" value="Sign In"></app-button> 
       </form>
+      <p class="agreement">
+        Don't have an account?
+        <a [routerLink]="['/register']" class="agreement">Sign up</a>
+      </p>
       <span class="agreement"><a href="#">Learn user license agreement</a></span>
     </div>
   </body>

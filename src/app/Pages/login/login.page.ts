@@ -30,13 +30,13 @@ export class LoginPage implements OnInit {
       const { email, password } = this.loginForm.value;
       try {
         await this.authSvr.logInWithEmailAndPassword(email, password); // Usamos el método login del servicio
-        console.log('Inicio de sesión exitoso. Navegando a /home');
+        console.log('Successful login. Navigating to /home');
         this.navCtrl.navigateForward('home');
       } catch (error) {
-        console.error('Error al iniciar sesión:', error);
+        console.error('Error logging in:', error);
       }
     } else {
-      console.log('Formulario no válido');
+      console.log('Invalid form');
     }
   }
 }

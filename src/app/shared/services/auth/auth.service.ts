@@ -14,28 +14,33 @@ export class AuthService {
     private afAuth: AngularFireAuth,
     private router: Router
   ) {
-    // Observa el estado de autenticación de Firebase
-    this.afAuth.authState.subscribe(user => {
-      if (user) {
-        this.isAuthenticatedSubject.next(true);
-      } else {
-        this.isAuthenticatedSubject.next(false);
-      }
+     // Escucha el estado de autenticación de Firebase
+     this.afAuth.authState.subscribe(user => {
+      this.isAuthenticatedSubject.next(!!user);  // Actualiza el estado con true si el usuario está autenticado
     });
   }
 
   async logInWithEmailAndPassword(email: string, password: string): Promise<void> {
     try {
       await this.afAuth.signInWithEmailAndPassword(email, password);
-      console.log('Usuario autenticado');
+      // Actualiza isAuthenticatedSubject a true
+      this.isAuthenticatedSubject.next(true);
+      console.log('Authenticated user');
       this.router.navigate(['/home']);  // Redirige una vez que el usuario está autenticado
     } catch (error) {
-      console.error('Error al iniciar sesión', error);
+      console.error('Error logging in', error);
+      this.isAuthenticatedSubject.next(false);  
     }
   }
 
   async logOut(): Promise<void> {
     await this.afAuth.signOut();
-    this.router.navigate(['/login']);  // Redirige a la página de login cuando el usuario se desconecta
+    this.isAuthenticatedSubject.next(false);  // Actualiza el estado de autenticación
+    this.router.navigate(['/login']);  // Redirige a la página de inicio de sesión
+  }
+
+  // Método para obtener el estado de autenticación actual
+  isAuthenticated(): boolean {
+    return this.isAuthenticatedSubject.value;
   }
 }

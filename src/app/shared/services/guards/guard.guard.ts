@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
-import { take, map, catchError } from 'rxjs/operators';
+import { map, switchMap, catchError } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -15,19 +15,19 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> {
-    return this.authService.isAuthenticated$.pipe(
-      take(1),  // Asegura que solo tomamos el primer valor emitido por el observable
-      map(isAuthenticated => {
-        if (!isAuthenticated) {
-          return true;
+    // Espera hasta que el estado de autenticación esté completamente listo
+     return this.authService.isAuthenticated$.pipe(
+      switchMap(isAuthenticated => {
+        if (isAuthenticated) {
+          return of(true); // Permite el acceso si el usuario está autenticado
         } else {
           this.router.navigate(['/login']);  // Redirige si no está autenticado
-          return false;
+          return of(false); // Bloquea el acceso si no está autenticado
         }
       }),
       catchError(() => {
-        this.router.navigate(['/login']);
-        return [false];
+        this.router.navigate(['/login']);  // Redirige en caso de error
+        return of(false);
       })
     );
   }
