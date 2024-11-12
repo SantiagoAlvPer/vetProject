@@ -13,6 +13,7 @@ import { PetServiceService } from './services/PetService/pet-service.service';
 import { PetListComponent } from './components/PetList/pet-list/pet-list.component';
 import { PetBreedService } from './services/PetBreedService/pet-breed-service.service';
 import { ToastService } from './controllers/toast/toast.service';
+import { LocalNotificationsService } from './controllers/localNotificacions/local-notifications.service';
 
 const Components = [
   InputComponent,
@@ -30,7 +31,7 @@ const Modules = [
   RouterLink
 ];
 
-const Controlers = [ToastService]
+const Controllers = [ToastService, LocalNotificationsService]
 
 
 const Providers = [
@@ -43,7 +44,7 @@ const Providers = [
 @NgModule({
   declarations: [...Components],
   imports: [...Modules],
-  providers: [...Providers, ...Controlers],
+  providers: [...Providers, ...Controllers],
   exports: [...Components, ...Modules],
 })
 export class SharedModule { }
