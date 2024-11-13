@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PetBreedService } from 'src/app/shared/services/PetBreedService/pet-breed-service.service';
+import { PetBreedService } from 'src/app/PetModule/PetServices/PetBreedService/pet-breed-service.service';
 
 @Component({
   selector: 'app-pet-list',
