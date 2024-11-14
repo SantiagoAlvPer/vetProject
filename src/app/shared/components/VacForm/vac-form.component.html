@@ -1,14 +1,38 @@
 <ion-card class="form">
     <ion-card-content class="content">
-        <form [formGroup]="vacunaForm" (ngSubmit)="onSubmit()">
-            <ion-grid fixed>
-                <ion-row>
-                    <ion-col>
-                        <ion-label position="stacked">Nombre de la Mascota</ion-label>
-                        <ion-input formControlName="nombreMascota"></ion-input>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-        </form>
+      <form [formGroup]="vacunaForm" (ngSubmit)="onSubmit()">
+        <p class="title">{{title}}</p>
+        <ion-grid fixed>
+          <ion-row>
+            <ion-col size="12">
+              <p class="message">{{message}} </p>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="6">
+              <ion-label position="floating">Nombre de la Vacuna</ion-label>
+              <app-input label="nombreVacuna" type="text" [fill]="'outline'" [placeholder]="'Lula'" [control]="nombreVacuna"></app-input>
+            </ion-col>
+            <ion-col size="6">
+              <app-pet-list></app-pet-list>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="4">
+              <ion-label position="floating">Fecha de Vacuna</ion-label>
+              <app-input label="fechaVacunacion" type="text" [fill]="'outline'" [placeholder]="'2'" [control]="fechaVacunacion"></app-input>
+            </ion-col>
+            <ion-col size="4">
+              <ion-label position="floating">Certificado</ion-label>
+              <app-input label="certificado" type="text" [fill]="'outline'" [placeholder]="'18/2/22'" [control]="certificado"></app-input>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <app-button value="Vacuna" [type]="'submit'" [disabled]="vacunaForm.invalid">{{existingVacuna ? 'Actualizar vacuna' : 'Agregar vacuna'}}</app-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
     </ion-card-content>
-</ion-card>
+  </ion-card>

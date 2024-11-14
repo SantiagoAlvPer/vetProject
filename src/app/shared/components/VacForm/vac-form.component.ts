@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { IVaccine } from '../../interfaces/IVaccine';
+import { VaccineService } from '../../services/Vaccine/vaccine.service';
 
 @Component({
   selector: 'app-form-vacunas',
@@ -7,21 +9,19 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styleUrls: ['./vac-form.component.scss']
 })
 export class FormVacunasComponent {
+
+  @Input() title: string = '';
+  @Input() message: string = '';
+  @Input() existingVacuna: IVaccine | null = null;
+
+
   public vacunaForm!: FormGroup;
 
-  /*constructor(private fb: FormBuilder) {
-    this.vacunaForm = this.fb.group({
-      nombreMascota: ['', [Validators.required]],
-      tipoVacuna: ['', [Validators.required]],
-      fechaVacunacion: ['', [Validators.required]],
-      observaciones: ['']
-    });
-  }*/
-
-  public nombreMascota!: FormControl;
-  public tipoVacuna!: FormControl;
+  public nombreVacuna!: FormControl;
   public fechaVacunacion!: FormControl;
-  public observaciones!: FormControl;
+  public certificado!: FormControl;
+
+  constructor(private fb: FormBuilder, private vaccineService: VaccineService) {}
 
   ngOnInit(){
     this.initForm();
@@ -29,7 +29,16 @@ export class FormVacunasComponent {
 
   onSubmit() {
     if (this.vacunaForm.valid) {
-      console.log('Formulario enviado:', this.vacunaForm.value);
+      const vaccineData = this.vacunaForm.value;
+      if(this.existingVacuna){
+        //actualiza vacuna
+        this.vaccineService.updateVaccine(this.existingVacuna,vaccineData);
+        console.log("Formulario actualizado: ", vaccineData);
+      } else {
+        //agrega vacuna
+        this.vaccineService.createVaccine(vaccineData);
+        console.log("Formulario enviado: ", vaccineData);
+      }
     } else {
       console.log('Formulario inválido');
     }
@@ -37,16 +46,14 @@ export class FormVacunasComponent {
 
   private initForm(){
 
-    this.nombreMascota = new FormControl('', [Validators.required]);
-    this.tipoVacuna = new FormControl('', [Validators.required]);
+    this.nombreVacuna = new FormControl('', [Validators.required]);
     this.fechaVacunacion = new FormControl('', [Validators.required]);
-    this.observaciones = new FormControl('');
+    this.certificado = new FormControl('');
 
     this.vacunaForm = new FormGroup({
-      nombreMascota: this.nombreMascota,
-      tipoVacuna: this.tipoVacuna,
+      nombreVacuna: this.nombreVacuna,
       fechaVacunacion: this.fechaVacunacion,
-      observaciones: this.observaciones
+      certificado: this.certificado
     });
   }
 }

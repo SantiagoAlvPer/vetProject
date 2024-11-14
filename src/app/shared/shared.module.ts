@@ -14,13 +14,16 @@ import { PetFormComponent } from '../PetModule/PetComponents/PetForm/pet-form/pe
 import { PetListComponent } from '../PetModule/PetComponents/PetList/pet-list/pet-list.component';
 import { PetServiceService } from '../PetModule/PetServices/PetService/pet-service.service';
 import { PetBreedService } from '../PetModule/PetServices/PetBreedService/pet-breed-service.service';
+import { FormVacunasComponent } from './components/VacForm/vac-form.component';
+import { VaccineService } from './services/Vaccine/vaccine.service';
 
 const Components = [
   InputComponent,
   CardComponent,
   ButtonComponent,
   PetFormComponent,
-  PetListComponent
+  PetListComponent,
+  FormVacunasComponent
 ];
 
 const Modules = [
@@ -38,7 +41,8 @@ const Providers = [
   StorageService,
   AuthService,
   PetServiceService,
-  PetBreedService
+  PetBreedService,
+  VaccineService
   ];
 
 @NgModule({
