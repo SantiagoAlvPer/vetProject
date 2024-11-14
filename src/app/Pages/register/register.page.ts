@@ -16,7 +16,6 @@ export class RegisterPage implements OnInit {
   public phone!: FormControl;
   public email!: FormControl;
   public password!: FormControl;
-  public birthDate!: FormControl;
   public signupForm!: FormGroup;
 
   constructor( private readonly authSvr: AuthService,
@@ -40,7 +39,6 @@ export class RegisterPage implements OnInit {
         age: formValues.age,
         phone: formValues.phone,
         email: formValues.email,
-        birthDate: formValues.birthDate,
         uid: '', // Este campo se completará con el UID generado por Firebase
         image: formValues.image, // Si tienes una imagen opcional
       };
@@ -61,7 +59,7 @@ export class RegisterPage implements OnInit {
   
   private initForm() {
     this.image = new FormControl('');
-    this.birthDate = new FormControl('');
+    this.password = new FormControl('');
     this.name = new FormControl('', [Validators.required]);
     this.lastName = new FormControl('', [Validators.required]);
     this.email = new FormControl('', [Validators.required, Validators.email]);
@@ -74,7 +72,7 @@ export class RegisterPage implements OnInit {
       age: this.age,
       phone: this.phone,
       email: this.email,
-      birthDate: this.birthDate,
+      password: this.password,
       image: this.image,
     });
   }

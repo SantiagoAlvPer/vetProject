@@ -4,7 +4,6 @@ export interface IUser {
     age: number;
     phone: string;
     email: string;
-    birthDate: string;
     uid: string; 
     image: string;
 }
