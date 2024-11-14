@@ -22,12 +22,21 @@
     "@angular/platform-browser": "^18.0.0",
     "@angular/platform-browser-dynamic": "^18.0.0",
     "@angular/router": "^18.0.0",
+    "@capacitor/android": "6.1.2",
     "@capacitor/app": "6.0.1",
     "@capacitor/core": "6.1.2",
     "@capacitor/haptics": "6.0.1",
+    "@capacitor/ios": "6.1.2",
     "@capacitor/keyboard": "6.0.2",
+    "@capacitor/local-notifications": "^6.1.0",
     "@capacitor/status-bar": "6.0.1",
+    "@capacitor/toast": "^6.0.2",
     "@ionic/angular": "^8.0.0",
+<<<<<<< HEAD
+=======
+    "@ionic/pwa-elements": "^3.3.0",
+>>>>>>> 92a26f5364716836ca642205a09b63f5c804cb73
+    "firebase": "^9.4.0",
     "ionicons": "^7.0.0",
     "rxfire": "^6.0.0",
     "rxjs": "~7.8.0",

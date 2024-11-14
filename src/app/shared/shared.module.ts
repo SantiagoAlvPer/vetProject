@@ -8,11 +8,19 @@ import { RouterLink } from '@angular/router';
 import { StorageService } from './services/storage/storage.service';
 import { AuthService } from './services/auth/auth.service';
 import { ButtonComponent } from './components/button/button.component';
+import { ToastService } from './controllers/toast/toast.service';
+import { LocalNotificationsService } from './controllers/localNotificacions/local-notifications.service';
+import { PetFormComponent } from '../PetModule/PetComponents/PetForm/pet-form/pet-form.component';
+import { PetListComponent } from '../PetModule/PetComponents/PetList/pet-list/pet-list.component';
+import { PetServiceService } from '../PetModule/PetServices/PetService/pet-service.service';
+import { PetBreedService } from '../PetModule/PetServices/PetBreedService/pet-breed-service.service';
 
 const Components = [
   InputComponent,
   CardComponent,
-  ButtonComponent
+  ButtonComponent,
+  PetFormComponent,
+  PetListComponent
 ];
 
 const Modules = [
@@ -23,15 +31,20 @@ const Modules = [
   RouterLink
 ];
 
+const Controllers = [ToastService, LocalNotificationsService]
+
+
 const Providers = [
   StorageService,
   AuthService,
+  PetServiceService,
+  PetBreedService
   ];
 
 @NgModule({
   declarations: [...Components],
   imports: [...Modules],
-  providers: [...Providers],
+  providers: [...Providers, ...Controllers],
   exports: [...Components, ...Modules],
 })
 export class SharedModule { }
