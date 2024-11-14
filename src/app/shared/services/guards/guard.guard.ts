@@ -9,7 +9,7 @@ import { map, switchMap, catchError } from 'rxjs/operators';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private readonly authService: AuthService, private router: Router) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
