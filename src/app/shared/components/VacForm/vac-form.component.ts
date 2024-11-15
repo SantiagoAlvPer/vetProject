@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { IVaccine } from '../../interfaces/IVaccine';
 import { VaccineService } from '../../services/Vaccine/vaccine.service';
+import { FilePicker, PickFilesOptions, PickFilesResult } from '@capawesome/capacitor-file-picker';
 
 @Component({
   selector: 'app-form-vacunas',
@@ -41,6 +42,23 @@ export class FormVacunasComponent {
       }
     } else {
       console.log('Formulario inválido');
+    }
+  }
+
+  //capacitor-file-picker
+  async pickFile(){
+    try{
+      const result = await FilePicker.pickFiles({
+        types: ['application/pdf'] // Puedes especificar otros tipos si es necesario
+      });
+
+      if (result.files && result.files.length > 0) {
+        const file = result.files[0];
+        this.certificado.setValue(file.name);
+        console.log('Archivo seleccionado:', file);
+      }
+    } catch (error){
+      console.log('Error al seleccionar archivo: ', error);
     }
   }
 

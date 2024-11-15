@@ -31,11 +31,10 @@
     "@capacitor/local-notifications": "^6.1.0",
     "@capacitor/status-bar": "6.0.1",
     "@capacitor/toast": "^6.0.2",
+    "@capawesome-team/capacitor-file-opener": "^6.1.0",
+    "@capawesome/capacitor-file-picker": "^6.1.0",
     "@ionic/angular": "^8.0.0",
-<<<<<<< HEAD
-=======
     "@ionic/pwa-elements": "^3.3.0",
->>>>>>> 92a26f5364716836ca642205a09b63f5c804cb73
     "firebase": "^9.4.0",
     "ionicons": "^7.0.0",
     "rxfire": "^6.0.0",
