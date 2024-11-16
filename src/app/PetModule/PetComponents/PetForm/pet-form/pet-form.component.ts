@@ -14,7 +14,6 @@ export class PetFormComponent implements OnInit {
   @Input() mode: 'register' | 'update' = 'register';
   public image!: FormControl;
   public name!: FormControl;
-  public age!: FormControl;
   public breed!: FormControl;
   public birthDate!: FormControl;
 
@@ -42,19 +41,17 @@ export class PetFormComponent implements OnInit {
 
   public updateBreed(breed: string) {
     this.breed.setValue(breed);
+    console.log('Breed updated:', this.breed.value);
   }
   
-
   private initForm() {
     this.image = new FormControl('');
     this.name = new FormControl('', [Validators.required]);
-    this.age = new FormControl('', [Validators.required]);
     this.breed = new FormControl('', [Validators.required]);
-    this.birthDate = new FormControl('', [Validators.required]);
+    this.birthDate = new FormControl('2024-01-01', [Validators.required]);
 
     this.petForm = new FormGroup({
       name: this.name,
-      age: this.age,
       breed: this.breed,
       birthDate: this.birthDate,
       image: this.image
