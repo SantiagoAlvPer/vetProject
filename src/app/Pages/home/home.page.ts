@@ -23,7 +23,6 @@ export class HomePage implements OnInit {
       this.isAuthenticated = authenticated;
     });
   }
-
   
 
   public async LogOut() {

@@ -1,7 +1,14 @@
-<ion-header [translucent]="true">
-</ion-header>
-<ion-content>
+<ion-toolbar>
+  <ion-buttons slot="end">
+    <ion-button>
+      <ion-icon slot="icon-only" name="log-out"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</ion-toolbar>
 
-  <app-pet-form></app-pet-form>
- 
+<ion-content [fullscreen]="true">
+  <app-pet-form 
+    [title]="'Pet form'" 
+    [message]="'Let us know about your little friend!.'">
+  </app-pet-form>
 </ion-content>
