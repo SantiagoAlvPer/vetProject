@@ -25,10 +25,10 @@ export class AuthGuard implements CanActivate {
           return of(false); // Bloquea el acceso si no está autenticado
         }
       }),
-      catchError(() => {
-        this.router.navigate(['/login']);  // Redirige en caso de error
-        return of(false);
-      })
+      // catchError(() => {
+      //   this.router.navigate(['/login']);  // Redirige en caso de error
+      //   return of(false);
+      // })
     );
   }
 }

@@ -28,63 +28,61 @@ export class AuthService {
     return this.isAuthenticatedSubject.value;
   }
   
+  async getCurrentUser(): Promise<firebase.default.User | null> {
+    try {
+      const user = await this.afAuth.currentUser;
+      return user;
+    } catch (error) {
+      console.error('Error obteniendo el usuario autenticado:');
+      return null;
+    }
+  }
+
+  // Iniciar sesión con correo y contraseña
   async logInWithEmailAndPassword(email: string, password: string): Promise<void> {
     try {
       await this.afAuth.signInWithEmailAndPassword(email, password);
       this.isAuthenticatedSubject.next(true);
-      console.log('Authenticated user');
-  
-      // Verifica si la ruta actual es diferente a '/home' antes de redirigir
+      console.log('Usuario autenticado con éxito');
+
+      // Redirigir a home si no está ya en esa ruta
       if (this.router.url !== '/home') {
         this.router.navigate(['/home']);
       }
     } catch (error) {
-      console.error('Error logging in', error);
+      console.error('Error al iniciar sesión:', error);
       this.isAuthenticatedSubject.next(false);
+      throw error; // Lanza el error para manejarlo en el componente si es necesario
     }
   }
 
-    // Método para registrar un usuario en Firebase Authentication y guardar datos en Firestore
-   // Método de registro
-   async doRegister(email: string, password: string, userData: IUser): Promise<void> {
-    try {
-      console.log('Iniciando registro de usuario');
+  // Registrar un nuevo usuario
+  async doRegister(email: string, password: string, userData: IUser): Promise<void> {
+    return this.afAuth.createUserWithEmailAndPassword(email, password).then(
+      async (userCredential) => {
+        const uid = userCredential.user?.uid;
+        if (uid) {
+          userData.uid = uid;
+          await this.fireStore.collection('IUser').doc(uid).set(userData);
+        }
+      }
+    );
+  }
   
-      // Crear el usuario en Firebase Authentication
-      const userCredential = await this.afAuth.createUserWithEmailAndPassword(email, password);
-      console.log('Usuario autenticado con éxito', userCredential);
-  
-      // Obtener el UID del usuario creado
-      const uid = userCredential.user?.uid;
 
-      if (uid) {
-        const userDocData: IUser = {
-          ...userData,
-          uid: uid
-        };
-  
-        // Guardar los datos en Firestore
-        await this.fireStore.collection("IUser").doc(uid).set(userDocData);
-        console.log('Datos del usuario guardados en Firestore');
-        
-        // Redirigir al usuario al login después de un registro exitoso
-        await this.router.navigate(['/login']);
-        console.log('Redirigiendo al login');
+  // Cerrar sesión
+  async logOut(): Promise<void> {
+    try {
+      await this.afAuth.signOut();
+      this.isAuthenticatedSubject.next(false);
+      console.log('Sesión cerrada');
+
+      // Redirigir a login si no está ya en esa ruta
+      if (this.router.url !== '/login') {
+        this.router.navigate(['/login']);
       }
     } catch (error) {
-      console.error('Error en el registro de usuario:', error);
-      throw error;
+      console.error('Error al cerrar sesión:', error);
     }
   }
-
-  async logOut(): Promise<void> {
-    await this.afAuth.signOut();
-    this.isAuthenticatedSubject.next(false);
-    
-    // Verifica si la ruta actual es diferente a '/login' antes de redirigir
-    if (this.router.url !== '/login') {
-      this.router.navigate(['/login']);
-    }
-  }
- 
 }

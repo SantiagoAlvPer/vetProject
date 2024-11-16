@@ -9,5 +9,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
     RegisterPageRoutingModule
   ],
   declarations: [RegisterPage]
+  
+
 })
 export class RegisterPageModule {}
