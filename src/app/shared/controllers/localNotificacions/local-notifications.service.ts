@@ -10,6 +10,7 @@ export class LocalNotificationsService {
     this.requestPermissions();
   }
 
+
   private async requestPermissions() {
     const permStatus = await LocalNotifications.requestPermissions();
     if (permStatus.display !== 'granted') {
