@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { CameraService } from 'src/app/PetModule/PetServices/Camera/camera.service';
 
 @Component({
   selector: 'app-pet-form',
@@ -8,6 +9,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 })
 
 export class PetFormComponent implements OnInit {
+
+  public imageUrl: string | null = null; // Para mostrar la imagen seleccionada
 
   @Input() title: string = '';
   @Input() message: string = '';
@@ -22,7 +25,7 @@ export class PetFormComponent implements OnInit {
   @Output() formValid = new EventEmitter<boolean>();
   @Output() formSubmit = new EventEmitter<any>();
 
-  constructor() {}
+  constructor(private readonly cameraSrv: CameraService) {}
 
   ngOnInit() {
     this.initForm();
@@ -42,6 +45,15 @@ export class PetFormComponent implements OnInit {
   public updateBreed(breed: string) {
     this.breed.setValue(breed);
     console.log('Breed updated:', this.breed.value);
+  }
+
+  async onCapturePhoto(source: 'camera' | 'gallery') {
+    try {
+      const image = await this.cameraSrv.capturePhoto(source);
+      this.imageUrl = image; // Guarda la URL de la imagen para mostrarla
+    } catch (error) {
+      console.error('Error al capturar o seleccionar la foto:', error);
+    }
   }
   
   private initForm() {

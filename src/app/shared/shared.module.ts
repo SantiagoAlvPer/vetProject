@@ -16,6 +16,8 @@ import { PetServiceService } from '../PetModule/PetServices/PetService/pet-servi
 import { PetBreedService } from '../PetModule/PetServices/PetBreedService/pet-breed-service.service';
 import { FormVacunasComponent } from './components/VacForm/vac-form.component';
 import { VaccineService } from './services/Vaccine/vaccine.service';
+import { LoadingService } from './controllers/loading/loading.service';
+import { HttpClientModule } from '@angular/common/http';
 
 const Components = [
   InputComponent,
@@ -31,10 +33,11 @@ const Modules = [
   FormsModule,
   IonicModule,
   ReactiveFormsModule, 
-  RouterLink
+  RouterLink,
+  HttpClientModule
 ];
 
-const Controllers = [ToastService, LocalNotificationsService]
+const Controllers = [ToastService, LocalNotificationsService, LoadingService]
 
 
 const Providers = [
