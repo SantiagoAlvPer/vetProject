@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -18,8 +19,9 @@ export class RegisterPage implements OnInit {
   public password!: FormControl;
   public signupForm!: FormGroup;
 
-  constructor( private readonly authSvr: AuthService,
-    
+  constructor( 
+    private readonly authSvr: AuthService,
+    private readonly router: Router // Inyectar Router
   ) { 
 
   }
@@ -28,38 +30,40 @@ export class RegisterPage implements OnInit {
     this.initForm();
 
   }
-  onSubmit() {
+  async onSubmit() {
     if (this.signupForm.valid) {
       const formValues = this.signupForm.value;
-  
-      // Crear un objeto de usuario con los datos del formulario
+
+      // Crear un objeto de usuario SIN la contraseña
       const userData: IUser = {
         name: formValues.name,
         lastName: formValues.lastName,
         age: formValues.age,
         phone: formValues.phone,
         email: formValues.email,
-        uid: '', // Este campo se completará con el UID generado por Firebase
-        image: formValues.image, // Si tienes una imagen opcional
+        uid: '', // Este campo será completado por el servicio de autenticación
+        image: formValues.image || null, // Si tienes una imagen opcional
       };
-  
-      // Llamar al servicio de autenticación para registrar el usuario
-      this.authSvr.doRegister(userData.email, 'yourPasswordHere', userData)
-        .then(() => {
-          console.log('Usuario registrado correctamente');
-        })
-        .catch((error) => {
-          console.error('Error al registrar usuario', error);
-        });
+
+      try {
+        // Registrar usuario con Firebase Authentication y almacenar datos en Firestore
+        await this.authSvr.doRegister(formValues.email, formValues.password, userData);
+        console.log('Usuario registrado correctamente');
+
+        await this.router.navigate(['/login']);
+      } catch (error) {
+        console.error('Error al registrar usuario:', error);
+        // Manejo de errores comunes
+      }
     } else {
-      console.log('Formulario inválido');
+      console.log('Formulario inválido. Por favor, revise los datos.');
     }
   }
 
   
   private initForm() {
     this.image = new FormControl('');
-    this.password = new FormControl('');
+    this.password = new FormControl('',[Validators.required, Validators.minLength(6)]);
     this.name = new FormControl('', [Validators.required]);
     this.lastName = new FormControl('', [Validators.required]);
     this.email = new FormControl('', [Validators.required, Validators.email]);
