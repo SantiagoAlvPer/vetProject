@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { PetBreedService } from 'src/app/PetModule/PetServices/PetBreedService/pet-breed-service.service';
 
 @Component({
@@ -7,6 +7,7 @@ import { PetBreedService } from 'src/app/PetModule/PetServices/PetBreedService/p
   styleUrls: ['./pet-list.component.scss'],
 })
 export class PetListComponent implements OnInit {
+  @Output() breedSelected = new EventEmitter<string>();
   breeds: string[] = [];
   petType: 'perro' | 'gato' = 'perro';
 
@@ -17,9 +18,14 @@ export class PetListComponent implements OnInit {
   }
 
   onPetTypeChange(event: Event) {
-    const selectElement = event.target as HTMLSelectElement; // Casting seguro a HTMLSelectElement
+    const selectElement = event.target as HTMLSelectElement;
     this.petType = selectElement.value as 'perro' | 'gato';
     this.loadBreeds(this.petType);
+  }
+
+  onBreedChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    this.breedSelected.emit(selectElement.value);
   }
 
   private loadBreeds(type: 'perro' | 'gato') {

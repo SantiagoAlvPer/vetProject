@@ -5,6 +5,6 @@
 </select>
 
 <label for="breed">Raza</label>
-<select id="breed">
+<select id="breed" (change)="onBreedChange($event)">
   <option *ngFor="let breed of breeds" [value]="breed">{{ breed }}</option>
 </select>

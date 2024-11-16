@@ -40,6 +40,11 @@ export class PetFormComponent implements OnInit {
     }
   }
 
+  public updateBreed(breed: string) {
+    this.breed.setValue(breed);
+  }
+  
+
   private initForm() {
     this.image = new FormControl('');
     this.name = new FormControl('', [Validators.required]);
