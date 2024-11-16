@@ -13,7 +13,7 @@
               <app-input label="Name" type="text" [fill]="'outline'" [placeholder]="'Lula'" [control]="name"></app-input>
             </ion-col>
             <ion-col size="6">
-              <app-pet-list></app-pet-list>
+              <app-pet-list (breedSelected)="updateBreed($event)"></app-pet-list>
             </ion-col>
           </ion-row>
           <ion-row>

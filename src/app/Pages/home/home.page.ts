@@ -2,6 +2,7 @@ import { AuthService } from './../../shared/services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Route } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { PetBreedService } from 'src/app/PetModule/PetServices/PetBreedService/pet-breed-service.service';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,6 @@ export class HomePage implements OnInit {
   
   constructor(
     private readonly authSrv: AuthService,
-
   ) {
 
   }
@@ -23,6 +23,8 @@ export class HomePage implements OnInit {
       this.isAuthenticated = authenticated;
     });
   }
+
+  
 
   public async LogOut() {
     this.authSrv.logOut().then(() => {
