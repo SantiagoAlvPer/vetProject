@@ -28,15 +28,23 @@ export class AuthService {
     return this.isAuthenticatedSubject.value;
   }
   
+  // Obtener el usuario autenticado
   async getCurrentUser(): Promise<firebase.default.User | null> {
     try {
       const user = await this.afAuth.currentUser;
       return user;
     } catch (error) {
-      console.error('Error obteniendo el usuario autenticado:');
+      console.error('Error obteniendo el usuario autenticado:', error);
       return null;
     }
   }
+
+  // Obtener el UID del usuario autenticado
+  async getCurrentUserUID(): Promise<string | null> {
+    const user = await this.getCurrentUser();
+    return user ? user.uid : null; // Si el usuario está autenticado, devuelve el UID, si no, null
+  }
+
 
   // Iniciar sesión con correo y contraseña
   async logInWithEmailAndPassword(email: string, password: string): Promise<void> {

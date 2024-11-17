@@ -13,23 +13,26 @@ export class PetServiceService {
     private readonly authSvr: AuthService
   ) {}
 
-  // Agregar una mascota
   async addPet(pet: Omit<IPet, 'petID' | 'petOwnerID'>): Promise<void> {
-    const currentUser = await this.authSvr.getCurrentUser();
-    if (!currentUser) {
-      throw new Error('Usuario no autenticado');
-    }
+    try {
+      // Obtener el UID del usuario autenticado
+      const petOwnerID = await this.authSvr.getCurrentUserUID();
+      if (!petOwnerID) {
+        throw new Error('Usuario no autenticado');
+      }
 
-    const petOwnerID = currentUser.uid; // Obtener el UID del usuario autenticado
-
-    // Agregar la mascota a Firestore (ID generado automáticamente)
-    await this.firestore
-      .collection('IUSer')
-      .doc(petOwnerID)
-      .collection('pet')
-      .add({
+      // Agregar la mascota con el petOwnerID (Firestore generará el petID automáticamente)
+      const petData = {
         ...pet,
-        petOwnerID, // Asociar el ID del propietario
-      });
+        petOwnerID, // Asocia el propietario a la mascota con el UID del usuario autenticado
+      };
+
+      // Guardar la mascota en Firestore
+      await this.firestore.collection('pet').add(petData);
+      console.log('Mascota registrada con éxito');
+    } catch (error) {
+      console.error('Error al agregar la mascota:', error);
+      throw error; // Lanza el error para que el componente lo maneje
+    }
   }
 }
