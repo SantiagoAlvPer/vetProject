@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IUser } from 'src/app/shared/interfaces/IUser';
+import { CameraService } from 'src/app/PetModule/PetServices/Camera/camera.service';
 
 @Component({
   selector: 'app-register',
@@ -10,6 +11,8 @@ import { IUser } from 'src/app/shared/interfaces/IUser';
   styleUrls: ['./register.page.scss'],
 })
 export class RegisterPage implements OnInit {
+  public imageUrl: string | null = null; // Para mostrar la imagen seleccionada
+
   public image!: FormControl;
   public name!: FormControl;
   public lastName!: FormControl;
@@ -21,15 +24,14 @@ export class RegisterPage implements OnInit {
 
   constructor( 
     private readonly authSvr: AuthService,
-    private readonly router: Router // Inyectar Router
-  ) { 
-
-  }
+    private readonly router: Router, // Inyectar Router
+    private readonly cameraSrv: CameraService
+  ) {}
 
   ngOnInit() {
     this.initForm();
-
   }
+
   async onSubmit() {
     if (this.signupForm.valid) {
       const formValues = this.signupForm.value;
@@ -60,6 +62,9 @@ export class RegisterPage implements OnInit {
     }
   }
 
+  onImageUploaded(imageUrl: string) {
+    this.signupForm.get('image')?.setValue(imageUrl);
+  }
   
   private initForm() {
     this.image = new FormControl('');
@@ -80,5 +85,4 @@ export class RegisterPage implements OnInit {
       image: this.image,
     });
   }
-
 }
