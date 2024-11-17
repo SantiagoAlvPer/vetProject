@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-type ButtonType = 'text' | 'password' | 'number' | 'email' | 'tel';
+type ButtonType = 'text' | 'password' | 'number' | 'email' | 'tel' | 'date';
 type PropertyType = "clear" | "outline" | "solid"
 
 @Component({

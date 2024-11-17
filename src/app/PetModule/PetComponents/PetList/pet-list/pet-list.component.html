@@ -1,10 +1,19 @@
-<label for="petType">Tipo de mascota</label>
-<select id="petType" (change)="onPetTypeChange($event)">
-  <option value="perro">Perro</option>
-  <option value="gato">Gato</option>
-</select>
-
-<label for="breed">Raza</label>
-<select id="breed">
-  <option *ngFor="let breed of breeds" [value]="breed">{{ breed }}</option>
-</select>
+<ion-grid fixed>
+  <ion-row>
+    <ion-col  size="12">
+      <label for="petType">Type of pet: </label>
+      <select class="select" id="petType" (change)="onPetTypeChange($event)">
+        <option value="perro">Dog</option>
+        <option value="gato">Cat</option>
+      </select>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12">
+      <label for="breed">Breed</label>
+      <select class="select" id="breed" (change)="onBreedChange($event)">
+      <option *ngFor="let breed of breeds" [value]="breed">{{ breed }}</option>
+      </select>
+    </ion-col>
+  </ion-row>
+</ion-grid>

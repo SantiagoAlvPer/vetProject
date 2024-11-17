@@ -1,12 +1,10 @@
-<ion-header [translucent]="true">
-</ion-header>
-<ion-content>
-
-
-  <h2>Bienvenido a la página de inicio</h2>
-
-  <p>Esta es la página principal de tu aplicación.</p>
-  
-  <ion-button expand="full" color="danger" (click)="LogOut()" > log Out</ion-button> 
- 
+<ion-content [fullscreen]="true">
+  <body>
+    <app-pet-form 
+      [title]="'Pet form'" 
+      [message]="'Let us know about your little friend!.'">
+    </app-pet-form>
+  </body>
 </ion-content>
+
+<ion-icon class="setting" name="settings" (click)="openSettingsModal()"></ion-icon>
