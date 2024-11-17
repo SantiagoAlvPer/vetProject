@@ -21,6 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ModalComponent } from './components/modal/modal/modal.component';
 import { AvatarComponent } from './components/avatar/avatar/avatar.component';
 import { PopoverComponent } from './components/popover/popover.component';
+import { LocalStorageService } from './services/localstorage/localstorage.service';
 
 const Components = [
   InputComponent,
@@ -51,7 +52,8 @@ const Providers = [
   AuthService,
   PetServiceService,
   PetBreedService,
-  VaccineService
+  VaccineService,
+  LocalStorageService
   ];
 
 @NgModule({
