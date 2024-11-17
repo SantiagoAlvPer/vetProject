@@ -1,6 +1,6 @@
 <ion-card class="form">
   <ion-card-content class="content">
-    <form [formGroup]="petForm" (ngSubmit)="handleFormSubmit()">
+    <form [formGroup]="petForm" (ngSubmit)="registerPet()">
       <p class="title">{{title}}</p>
       <ion-grid fixed>
         <ion-row>
@@ -21,6 +21,11 @@
         <ion-row>
           <ion-col size="12">
             <app-input label="BirthDate" type="date" [fill]="'outline'" [placeholder]="'2024-01-01'" [control]="birthDate"></app-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <app-input label="Age" type="text" [fill]="'outline'" [placeholder]="'2'" [control]="age"></app-input>
           </ion-col>
         </ion-row>
         <ion-row>
