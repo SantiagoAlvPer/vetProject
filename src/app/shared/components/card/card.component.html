@@ -11,4 +11,13 @@
   <div class="temp-scale">
     <span>{{breed}}</span>
   </div>
+
+  <div class="popover">
+    <ion-buttons class="setting">
+      <ion-button (click)="presentPopover($event)">
+        <ion-icon name="ellipsis-vertical"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </div>
+
 </ion-card>

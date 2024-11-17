@@ -1,10 +1,15 @@
-<ion-content [fullscreen]="true">
-  <body>
+<ion-content [fullscreen]="true" class="body">
+  
     <app-pet-form 
       [title]="'Pet form'" 
       [message]="'Let us know about your little friend!.'">
     </app-pet-form>
-  </body>
+
+    <app-card></app-card>
+    <app-card></app-card>
+
+  
 </ion-content>
+
 
 <ion-icon class="setting" name="settings" (click)="openSettingsModal()"></ion-icon>

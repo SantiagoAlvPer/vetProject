@@ -1,0 +1,6 @@
+<ion-list class="content">
+  <ion-item *ngFor="let option of options" (click)="onOptionClick(option.value)">
+    <ion-icon [name]="option.icon" slot="start"></ion-icon>
+    <ion-label>{{ option.label }}</ion-label>
+  </ion-item>
+</ion-list>

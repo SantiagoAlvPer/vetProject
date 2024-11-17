@@ -1,8 +1,5 @@
-body {
-  background-image: url('/assets/img/home2.png');
-  background-size: cover; 
-  background-position: center; 
-  background-repeat: no-repeat; 
+.body {
+ --background: url('/assets/img/home2.png') no-repeat center center / cover;
 }
 
 #container {
