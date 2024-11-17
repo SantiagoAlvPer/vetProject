@@ -19,6 +19,7 @@ import { VaccineService } from './services/Vaccine/vaccine.service';
 import { LoadingService } from './controllers/loading/loading.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ModalComponent } from './components/modal/modal/modal.component';
+import { AvatarComponent } from './components/avatar/avatar/avatar.component';
 
 const Components = [
   InputComponent,
@@ -27,7 +28,8 @@ const Components = [
   PetFormComponent,
   PetListComponent,
   FormVacunasComponent,
-  ModalComponent
+  ModalComponent,
+  AvatarComponent
 ];
 
 const Modules = [

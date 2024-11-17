@@ -1,0 +1,7 @@
+<div class="avatar-container">
+  <img [src]="imageUrl || defaultImage" alt="Avatar" class="avatar-image" />
+  <div class="button-group" *ngIf="!onlyView">
+    <app-button value="Tomar Foto" (click)="onSelectPhoto('camera')"></app-button>
+    <app-button value="Elegir de Galería" (click)="onSelectPhoto('gallery')"></app-button>
+  </div>
+</div>
