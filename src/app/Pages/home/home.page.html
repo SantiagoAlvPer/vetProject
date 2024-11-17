@@ -1,14 +1,8 @@
-<ion-toolbar>
-  <ion-buttons slot="end">
-    <ion-button>
-      <ion-icon slot="icon-only" name="log-out"></ion-icon>
-    </ion-button>
-  </ion-buttons>
-</ion-toolbar>
-
 <ion-content [fullscreen]="true">
   <app-pet-form 
     [title]="'Pet form'" 
     [message]="'Let us know about your little friend!.'">
   </app-pet-form>
 </ion-content>
+
+<ion-icon class="setting" name="settings" (click)="openSettingsModal()"></ion-icon>

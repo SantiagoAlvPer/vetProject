@@ -1,8 +1,7 @@
 import { AuthService } from './../../shared/services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
-import { Route } from '@angular/router';
-import { NavController } from '@ionic/angular';
-import { PetBreedService } from 'src/app/PetModule/PetServices/PetBreedService/pet-breed-service.service';
+import { ModalController, NavController } from '@ionic/angular';
+import { ModalComponent } from 'src/app/shared/components/modal/modal/modal.component';
 
 @Component({
   selector: 'app-home',
@@ -15,6 +14,7 @@ export class HomePage implements OnInit {
   
   constructor(
     private readonly authSrv: AuthService,
+    private readonly modalCtrl: ModalController
   ) {
 
   }
@@ -23,7 +23,22 @@ export class HomePage implements OnInit {
       this.isAuthenticated = authenticated;
     });
   }
-  
+
+  async openSettingsModal() {
+    const modal = await this.modalCtrl.create({
+      component: ModalComponent,
+      cssClass: 'settings-modal',
+    });
+
+    await modal.present();
+
+    const { data } = await modal.onDidDismiss();
+    if (data === 'updateProfile') {
+      // this.goToUpdateProfile();
+    } else if (data === 'logOut') {
+      this.LogOut();
+    }
+  }
 
   public async LogOut() {
     this.authSrv.logOut().then(() => {

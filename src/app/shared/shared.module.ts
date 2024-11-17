@@ -18,6 +18,7 @@ import { FormVacunasComponent } from './components/VacForm/vac-form.component';
 import { VaccineService } from './services/Vaccine/vaccine.service';
 import { LoadingService } from './controllers/loading/loading.service';
 import { HttpClientModule } from '@angular/common/http';
+import { ModalComponent } from './components/modal/modal/modal.component';
 
 const Components = [
   InputComponent,
@@ -25,7 +26,8 @@ const Components = [
   ButtonComponent,
   PetFormComponent,
   PetListComponent,
-  FormVacunasComponent
+  FormVacunasComponent,
+  ModalComponent
 ];
 
 const Modules = [

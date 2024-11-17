@@ -55,6 +55,16 @@ export class PetFormComponent implements OnInit {
       console.error('Error al capturar o seleccionar la foto:', error);
     }
   }
+
+  public setFormData(pet: any) {
+    this.petForm.patchValue({
+      image: pet.image || '',
+      name: pet.name || '',
+      breed: pet.breed || '',
+      age: pet.age || '',
+      birthDate: pet.birthDate || '',
+    });
+  }
   
   private initForm() {
     this.image = new FormControl('');

@@ -20,7 +20,11 @@ const routes: Routes = [
     path: '**',
     redirectTo: 'login',
     pathMatch: 'full'
+  },  {
+    path: 'update-pet',
+    loadChildren: () => import('./Pages/updatePet/update-pet/update-pet.module').then( m => m.UpdatePetPageModule)
   }
+
 
 ];
 
