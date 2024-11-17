@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { IVaccine } from '../../interfaces/IVaccine';
 import { VaccineService } from '../../services/Vaccine/vaccine.service';
 import { FilePicker, PickFilesOptions, PickFilesResult } from '@capawesome/capacitor-file-picker';
+import { FileOpener } from '@capawesome-team/capacitor-file-opener';
 
 @Component({
   selector: 'app-form-vacunas',
@@ -21,6 +22,7 @@ export class FormVacunasComponent {
   public nombreVacuna!: FormControl;
   public fechaVacunacion!: FormControl;
   public certificado!: FormControl;
+  public filePath: any;
 
   constructor(private fb: FormBuilder, private vaccineService: VaccineService) {}
 
@@ -59,6 +61,17 @@ export class FormVacunasComponent {
       }
     } catch (error){
       console.log('Error al seleccionar archivo: ', error);
+    }
+  }
+
+  //open-file
+  async openFile(){
+    try{
+      await FileOpener.openFile({
+        path: this.filePath,
+      });
+    }catch(e){
+      console.log('Error al abrir el archivo: ', e);
     }
   }
 

@@ -20,7 +20,12 @@ const routes: Routes = [
     path: '**',
     redirectTo: 'login',
     pathMatch: 'full'
+  },
+  {
+    path: 'vaccine',
+    loadChildren: () => import('./Pages/vaccine/vaccine.module').then( m => m.VaccinePageModule)
   }
+
 
 ];
 
