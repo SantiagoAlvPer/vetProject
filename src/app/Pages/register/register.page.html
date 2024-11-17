@@ -1,18 +1,20 @@
 <ion-content [fullscreen]="true">
-  <ion-card class="form">
-    <ion-card-content class="content">
+  <body>
+    <ion-card class="container">
+      <div class="heading">Register</div>
       <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
         <p class="title"></p>
         <ion-grid fixed>
           <ion-row>
             <ion-col size="12">
-              <p class="message"></p>
+              <p class="message">
+                Sign up to get full access to our app.
+              </p>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col size="9">
-              <app-input [control]="image" label="image" type="text" [fill]="'outline'"
-              [placeholder]="''"></app-input>
+              <app-input [control]="image" label="image" type="text" [fill]="'outline'" [placeholder]="''"></app-input>
             </ion-col>
           </ion-row>
           <ion-row>
@@ -27,7 +29,7 @@
           </ion-row>
           <ion-row>
             <ion-col size="4">
-              <app-input [control]="age" label="Age"></app-input>
+              <app-input [control]="age"  type="number" [fill]="'outline'" label="Age"></app-input>
             </ion-col>
             <ion-col size="8">
               <app-input [control]="phone" label="Phone" type="number" [fill]="'outline'"
@@ -36,12 +38,13 @@
           </ion-row>
           <ion-row>
             <ion-col size="12">
-              <app-input [control]="email" type="email" label="Email" [fill]="'outline'" [placeholder]="'James@gmail.com'"></app-input>
+              <app-input [control]="email" type="email" label="Email" [fill]="'outline'"
+                [placeholder]="'James@gmail.com'"></app-input>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col size="12">
-              <app-input [control]="password" label="password"></app-input>
+              <app-input [control]="password"  type="text" [fill]="'outline'" label="password"  [placeholder]="'**********'"></app-input>
             </ion-col>
           </ion-row>
           <ion-row>
@@ -49,15 +52,15 @@
               <app-button type="submit" value="Sing up"></app-button>
             </ion-col>
           </ion-row>
+          <ion-row>
+            <ion-col size="12">
+              <a [routerLink]="['login']" class="agreement">Already account? Sing in</a>
+            </ion-col>
+          </ion-row>
         </ion-grid>
       </form>
-      <ion-row>
-        <ion-col size="12">
-          <a [routerLink]="['login']" class="" >Already account?</a>
-        </ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
+    </ion-card>
+  </body>
 </ion-content>
 
 <span class="arrow"><a [routerLink]="['login']"><ion-icon slot="start" name="arrow-back"></ion-icon></a></span>
