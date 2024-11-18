@@ -1,8 +1,7 @@
-import { PetServiceService } from 'src/app/PetModule/PetServices/PetService/pet-service.service';
-import { Component, Input, OnInit } from '@angular/core';
-import { IPet } from 'src/app/shared/interfaces/IPet';
-import { ToastController } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { IPet } from 'src/app/shared/interfaces/IPet';
+import { PetServiceService } from 'src/app/PetModule/PetServices/PetService/pet-service.service';
 
 @Component({
   selector: 'app-update-pet',
@@ -10,22 +9,25 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./update-pet.page.scss'],
 })
 export class UpdatePetPage implements OnInit {
-  pets: IPet[] = [];
+  pet: IPet | null = null; // Almacena los datos de la mascota
 
-  @Input() petId: string = ''; // Agregamos el ID de la mascota
-  @Input() name: string = '';
-  @Input() breed: string = '';
-  @Input() age: string = '';  
-  @Input() birthDate: string = '';  
-  @Input() image: string = '';
   constructor(
-    private readonly petSvr: PetServiceService, 
-    private toastController: ToastController, // Inyectamos ToastController
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+    private petSvr: PetServiceService
+  ) {}
 
   ngOnInit() {
-   
+    // Obtenemos el ID desde la URL
+    const petId = this.route.snapshot.paramMap.get('id');
+    if (petId) {
+      // Cargar los datos de Firestore
+      this.petSvr.getPet(petId).subscribe({
+        next: (data) => {
+          this.pet = data || null;
+          console.log('Pet data loaded:', this.pet);
+        },
+        error: (err) => console.error('Error fetching pet data:', err),
+      });
+    }
   }
-
 }

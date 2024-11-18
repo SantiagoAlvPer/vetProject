@@ -15,6 +15,7 @@
   export class PetFormComponent implements OnInit {
     public imageUrl: string | null = null; // Para mostrar la imagen seleccionada
     
+    @Input() petData: IPet | null = null; // Recibir los datos de la mascota desde Firebase
     @Input() title: string = '';
     @Input() message: string = '';
     @Input() mode: 'register' | 'update' = 'register';
@@ -44,10 +45,8 @@
 
     // Manejar el registro de la mascota
     public async registerPet() {
-      this.loadingSrv.show('Logging in...');  
       if (this.petForm.valid) {
         try {
-
           await this.petSvr.addPet(this.petForm.value);
           this.localNotisSrv.showNotification(1, 'Bien!', 'Nueva mascota registrada!');
           this.petForm.reset(); // Reinicia el formulario después del registro
@@ -61,17 +60,16 @@
       }
     }
 
-
-    // public async handleFormSubmit() {
-    //   if (this.petForm.valid) {
-    //     if (this.mode === 'register') {
-    //       // await this.doRegister();
-    //     } else if (this.mode === 'update') {
-    //       // await this.doUpdate();
-    //     }
-    //   } else {
-    //   }
-    // }
+    public async handleFormSubmit() {
+      if (this.petForm.valid) {
+        if (this.mode === 'register') {
+          await this.registerPet()
+        } else if (this.mode === 'update') {
+          // await this.doUpdate();
+        }
+      } else {
+      }
+    }
 
     public updateBreed(breed: string) {
       this.breed.setValue(breed);

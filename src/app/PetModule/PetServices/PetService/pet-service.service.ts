@@ -78,4 +78,18 @@ export class PetServiceService {
     });
   }
 
+  deletePet(petId: string): Promise<void> {
+    return this.firestore
+      .collection('pet')
+      .doc(petId)
+      .delete()
+      .then(() => {
+        console.log('Mascota eliminada:', petId);
+      })
+      .catch((error) => {
+        console.error('Error al eliminar la mascota:', error);
+        throw error;
+      });
+  }
+
 }

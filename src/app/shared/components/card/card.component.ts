@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { LoadingService } from '../../controllers/loading/loading.service';
 import { PetServiceService } from 'src/app/PetModule/PetServices/PetService/pet-service.service';
 import { IPet } from '../../interfaces/IPet';
+import { ToastService } from '../../controllers/toast/toast.service';
 
 @Component({
   selector: 'app-card',
@@ -24,7 +25,8 @@ export class CardComponent  implements OnInit {
     private readonly popoverCtrl : PopoverController,
     private router: Router,
     private loadingSrv: LoadingService,
-    private readonly petSvr: PetServiceService
+    private readonly petSvr: PetServiceService,
+    private toastSrv: ToastService
   ) { }
 
   ngOnInit() {
@@ -34,8 +36,12 @@ export class CardComponent  implements OnInit {
   }
 
   async presentPopover(ev: Event) {  
-    const pet = { pet: this.name, description: this.breed }; 
-  
+    const pet = { 
+      petID: this.pets.find((p) => p.name === this.name)?.petID, // Busca el petID correspondiente
+      name: this.name,
+      breed: this.breed 
+    }; 
+    
     const popover = await this.popoverCtrl.create({
       component: PopoverComponent,
       cssClass: 'style-Popover',
@@ -46,7 +52,7 @@ export class CardComponent  implements OnInit {
           { label: 'Update', value: 'update', icon: 'create' },
           { label: 'Delete', value: 'delete', icon: 'trash' }
         ],
-        pet: pet 
+        pet: pet
       }
     });
   
@@ -60,23 +66,20 @@ export class CardComponent  implements OnInit {
 
   handleOptionSelection(option: string, pet: any) {
     if (option === 'update') {
-
-      this.router.navigate(['/update-pet'], { 
-        queryParams: { 
-          name: pet.name, 
-          breed: pet.breed,  // Asumiendo que el "description" es en realidad la raza
-          age: pet.age,
-          birthDate: pet.birthDate,
-          image: pet.image
-        }
-      });
-
+      this.router.navigate(['/update-pet', pet.petID]);
       console.log('Update task:', pet);
     } else if (option === 'delete') {
-    
- 
-      //Logica delete o funcion delete
-      console.log('Delete task:', pet);
+      this.loadingSrv.show('Deleting pet...');
+      this.petSvr.deletePet(pet.petID).then(() => {
+        console.log('Pet deleted:', pet);
+        this.pets = this.pets.filter((p) => p.petID !== pet.petID); // Actualiza la lista local
+        this.loadingSrv.dismiss();
+        this.toastSrv.showSuccess('Pet deleted successfully')
+      }).catch((error) => {
+        this.toastSrv.showError('Pet could not be deleted')
+        console.error('Error deleting pet:', error);
+        this.loadingSrv.dismiss();
+      });
     }
   }
 }
