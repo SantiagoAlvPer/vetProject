@@ -83,14 +83,10 @@ export class CardComponent  implements OnInit {
         this.loadingSrv.dismiss();
       });
     } else if(option === 'addVaccine'){
-      this.loadingSrv.show('Logging in...');
       this.router.navigate(['/vaccine']);
-      this.loadingSrv.dismiss();
       console.log('Add vacine: ', pet);
     } else if(option === 'updateVaccine') {
-      this.loadingSrv.show('Logging in...');
       this.router.navigate(['/update-vaccine']);
-      this.loadingSrv.dismiss();
       console.log('Update vacine: ', pet);
     }
   }
