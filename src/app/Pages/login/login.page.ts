@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NavController } from '@ionic/angular';
+import { LoadingService } from 'src/app/shared/controllers/loading/loading.service';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
 @Component({
@@ -15,7 +16,8 @@ export class LoginPage implements OnInit {
 
   constructor(
     private readonly authSvr: AuthService,
-    private readonly navCtrl: NavController
+    private readonly navCtrl: NavController,
+    private readonly loadingSrv: LoadingService
   ) {
     this.loginForm = new FormGroup({
       email: this.email,
@@ -27,11 +29,13 @@ export class LoginPage implements OnInit {
 
   async onSubmit(): Promise<void> {
     if (this.loginForm.valid) {
+      this.loadingSrv.show('Logging in...');  
       const { email, password } = this.loginForm.value;
       try {
-        await this.authSvr.logInWithEmailAndPassword(email, password); // Usamos el método login del servicio
+        await this.authSvr.logInWithEmailAndPassword(email, password); 
         console.log('Successful login. Navigating to /home');
         this.navCtrl.navigateForward('home');
+        this.loadingSrv.dismiss();
       } catch (error) {
         console.error('Error logging in:', error);
       }

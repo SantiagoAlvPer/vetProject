@@ -1,0 +1,15 @@
+<div class="avatar-container">
+  <img [src]="imageUrl || defaultImage" alt="Avatar" class="avatar-image" />
+  <div class="button-group" *ngIf="!onlyView">
+    <ion-grid fixed>
+      <ion-row>
+        <ion-col size="6">
+          <app-button value="Tomar Foto" (click)="onSelectPhoto('camera')"></app-button>
+        </ion-col>
+        <ion-col size="6">
+          <app-button value="Elegir de Galería" (click)="onSelectPhoto('gallery')"></app-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</div>

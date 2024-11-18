@@ -9,7 +9,7 @@ import { map, switchMap, catchError } from 'rxjs/operators';
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private readonly authService: AuthService, private router: Router) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -25,10 +25,10 @@ export class AuthGuard implements CanActivate {
           return of(false); // Bloquea el acceso si no está autenticado
         }
       }),
-      catchError(() => {
-        this.router.navigate(['/login']);  // Redirige en caso de error
-        return of(false);
-      })
+      // catchError(() => {
+      //   this.router.navigate(['/login']);  // Redirige en caso de error
+      //   return of(false);
+      // })
     );
   }
 }

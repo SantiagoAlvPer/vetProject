@@ -1,17 +1,21 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
+import { IUser } from '../../interfaces/IUser';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
-  public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+  public  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
   constructor(
-    private afAuth: AngularFireAuth,
+    private readonly afAuth: AngularFireAuth,
+    private readonly fireStore: AngularFirestore,
     private router: Router
   ) {
      // Escucha el estado de autenticación de Firebase
@@ -19,28 +23,74 @@ export class AuthService {
       this.isAuthenticatedSubject.next(!!user);  // Actualiza el estado con true si el usuario está autenticado
     });
   }
-
-  async logInWithEmailAndPassword(email: string, password: string): Promise<void> {
+ // Método para obtener el estado de autenticación actual
+  isAuthenticated(): boolean {
+    return this.isAuthenticatedSubject.value;
+  }
+  
+  // Obtener el usuario autenticado
+  async getCurrentUser(): Promise<firebase.default.User | null> {
     try {
-      await this.afAuth.signInWithEmailAndPassword(email, password);
-      // Actualiza isAuthenticatedSubject a true
-      this.isAuthenticatedSubject.next(true);
-      console.log('Authenticated user');
-      this.router.navigate(['/home']);  // Redirige una vez que el usuario está autenticado
+      const user = await this.afAuth.currentUser;
+      return user;
     } catch (error) {
-      console.error('Error logging in', error);
-      this.isAuthenticatedSubject.next(false);  
+      console.error('Error obteniendo el usuario autenticado:', error);
+      return null;
     }
   }
 
-  async logOut(): Promise<void> {
-    await this.afAuth.signOut();
-    this.isAuthenticatedSubject.next(false);  // Actualiza el estado de autenticación
-    this.router.navigate(['/login']);  // Redirige a la página de inicio de sesión
+  // Obtener el UID del usuario autenticado
+  async getCurrentUserUID(): Promise<string | null> {
+    const user = await this.getCurrentUser();
+    return user ? user.uid : null; // Si el usuario está autenticado, devuelve el UID, si no, null
   }
 
-  // Método para obtener el estado de autenticación actual
-  isAuthenticated(): boolean {
-    return this.isAuthenticatedSubject.value;
+
+  // Iniciar sesión con correo y contraseña
+  async logInWithEmailAndPassword(email: string, password: string): Promise<void> {
+    try {
+      await this.afAuth.signInWithEmailAndPassword(email, password);
+      this.isAuthenticatedSubject.next(true);
+      console.log('Usuario autenticado con éxito');
+
+      // Redirigir a home si no está ya en esa ruta
+      if (this.router.url !== '/home') {
+        this.router.navigate(['/home']);
+      }
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      this.isAuthenticatedSubject.next(false);
+      throw error; // Lanza el error para manejarlo en el componente si es necesario
+    }
+  }
+
+  // Registrar un nuevo usuario
+  async doRegister(email: string, password: string, userData: IUser): Promise<void> {
+    return this.afAuth.createUserWithEmailAndPassword(email, password).then(
+      async (userCredential) => {
+        const uid = userCredential.user?.uid;
+        if (uid) {
+          userData.uid = uid;
+          await this.fireStore.collection('IUser').doc(uid).set(userData);
+        }
+      }
+    );
+  }
+  
+
+  // Cerrar sesión
+  async logOut(): Promise<void> {
+    try {
+      await this.afAuth.signOut();
+      this.isAuthenticatedSubject.next(false);
+      console.log('Sesión cerrada');
+
+      // Redirigir a login si no está ya en esa ruta
+      if (this.router.url !== '/login') {
+        this.router.navigate(['/login']);
+      }
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
   }
 }
