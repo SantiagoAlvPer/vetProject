@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { PetServiceService } from 'src/app/PetModule/PetServices/PetService/pet-service.service';
 import { CameraService } from 'src/app/PetModule/PetServices/Camera/camera.service';
+import { IPet } from 'src/app/shared/interfaces/IPet';
 
 @Component({
   selector: 'app-pet-form',
@@ -9,6 +10,8 @@ import { CameraService } from 'src/app/PetModule/PetServices/Camera/camera.servi
   styleUrls: ['./pet-form.component.scss'],
 })
 export class PetFormComponent implements OnInit {
+
+  public pets: IPet[] = []; // Array para almacenar las mascotas
   public imageUrl: string | null = null; // Para mostrar la imagen seleccionada
 
   @Input() title: string = '';
@@ -32,8 +35,18 @@ export class PetFormComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
+    this.loadPets();
   }
 
+   // Cargar las mascotas del usuario
+   public async loadPets() {
+    try {
+      this.pets = await this.petSvr.getPetsByUser();
+      console.log('Mascotas cargadas:', this.pets);
+    } catch (error) {
+      console.error('Error al cargar las mascotas:', error);
+    }
+  }
   // Manejar el registro de la mascota
   public async registerPet() {
     if (this.petForm.valid) {
