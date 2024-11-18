@@ -18,14 +18,17 @@ const routes: Routes = [
   },
   {
     path: 'update-pet/:id',
+    canActivate:[AuthGuard],
     loadChildren: () => import('./Pages/updatePet/update-pet/update-pet.module').then( m => m.UpdatePetPageModule)
   },
   {
     path: 'vaccine',
+    canActivate:[AuthGuard],
     loadChildren: () => import('./Pages/vaccine/vaccine.module').then( m => m.VaccinePageModule)
   },
   {
     path: 'update-vaccine',
+    canActivate:[AuthGuard],
     loadChildren: () => import('./Pages/update-vaccine/update-vaccine.module').then( m => m.UpdateVaccinePageModule)
   },
   {

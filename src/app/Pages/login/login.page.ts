@@ -41,6 +41,7 @@ export class LoginPage implements OnInit {
         this.loadingSrv.dismiss();
       } catch (error) {
         this.toastSrv.showSuccess('Error en inicio de sesión :c');
+        this.loadingSrv.dismiss();
         console.error('Error logging in:', error);
       }
     } else {

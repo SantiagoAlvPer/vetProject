@@ -1,9 +1,10 @@
 <span class="arrow"><a [routerLink]="['/home']"><ion-icon slot="start" name="arrow-back"></ion-icon></a></span>
 
-<ion-card class="form">
+<ion-content [fullscreen]="true" class="body">
+  <ion-card class="form">
     <ion-card-content class="content">
       <form [formGroup]="vacunaForm" (ngSubmit)="handleFormSubmit()">
-        <p class="title">{{title}}</p>
+        <p class="heading">{{title}}</p>
         <ion-grid fixed>
           <ion-row>
             <ion-col size="12">
@@ -11,36 +12,35 @@
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size="6">
+            <ion-col size="12">
               <ion-label position="floating"></ion-label>
-              <app-input label="Nombre de la vacuna" type="text" [fill]="'outline'"  [control]="nombreVacuna"></app-input>
+              <app-input label="Nombre de la vacuna" type="text" [fill]="'outline'"
+                [control]="nombreVacuna"></app-input>
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size="4">
+            <ion-col size="12">
               <ion-label position="floating"></ion-label>
-              <app-input label="Fecha de vacunacion" type="text" [fill]="'outline'" [control]="fechaVacunacion"></app-input>
+              <app-input label="Fecha de vacunacion" type="text" [fill]="'outline'"
+                [control]="fechaVacunacion"></app-input>
             </ion-col>
           </ion-row>
-          <ion-row> 
-            <ion-col size="4">
+          <ion-row>
+            <ion-col size="12">
               <ion-label position="floating"></ion-label>
               <app-input label="Certificado" type="text" [fill]="'outline'" [control]="certificado"></app-input>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col>
-              <ion-button expand="block" (click)="pickFile()">
-                Seleccionar Archivo
-              </ion-button>
-              <ion-button expand="block" (click)="openFile()">
-                Abrir Archivo
-              </ion-button>
+              <app-button expand="block" (click)="pickFile()" value="Seleccionar Archivo"></app-button>
+              <app-button expand="block" (click)="openFile()" value='Abrir Archivo'></app-button>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col size="12">
-              <app-button [value]="mode === 'register' ? 'Register' : 'Update'" [type]="'submit'" [disabled]="vacunaForm.invalid">
+              <app-button [value]="mode === 'register' ? 'Register' : 'Update'" [type]="'submit'"
+                [disabled]="vacunaForm.invalid">
                 {{existingVacuna ? 'Actualizar vacuna' : 'Agregar vacuna'}}
               </app-button>
             </ion-col>
@@ -49,3 +49,4 @@
       </form>
     </ion-card-content>
   </ion-card>
+</ion-content>
