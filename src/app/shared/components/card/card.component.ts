@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { PopoverComponent } from '../popover/popover.component';
 import { Router } from '@angular/router';
+import { LoadingService } from '../../controllers/loading/loading.service';
 
 @Component({
   selector: 'app-card',
@@ -18,7 +19,8 @@ export class CardComponent  implements OnInit {
 
   constructor(
     private readonly popoverCtrl : PopoverController,
-    private router: Router
+    private router: Router,
+    private loadingSrv: LoadingService
   ) { }
 
   ngOnInit() {}
@@ -50,12 +52,15 @@ export class CardComponent  implements OnInit {
 
   handleOptionSelection(option: string, pet: any) {
     if (option === 'update') {
+      this.loadingSrv.show('Logging in...');  
       this.router.navigate(['/update-pet'], { queryParams: { name: pet.pet, description: pet.description } });
+      this.loadingSrv.dismiss();
       console.log('Update task:', pet);
     } else if (option === 'delete') {
-
+      this.loadingSrv.show('Logging in...');  
+      //Logica delete o funcion delete
+      this.loadingSrv.dismiss();
       console.log('Delete task:', pet);
     }
   }
-
 }

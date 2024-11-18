@@ -2,6 +2,7 @@ import { AuthService } from './../../shared/services/auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
 import { ModalComponent } from 'src/app/shared/components/modal/modal/modal.component';
+import { LoadingService } from 'src/app/shared/controllers/loading/loading.service';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +15,8 @@ export class HomePage implements OnInit {
   
   constructor(
     private readonly authSrv: AuthService,
-    private readonly modalCtrl: ModalController
+    private readonly modalCtrl: ModalController,
+    private readonly loadingSrv: LoadingService  // Agregar LoadingService al constructor para mostrar loading en el modal
   ) {
 
   }
@@ -41,10 +43,12 @@ export class HomePage implements OnInit {
   }
 
   public async LogOut() {
+    this.loadingSrv.show('Logging in...');  
     this.authSrv.logOut().then(() => {
       // Redirige o navega después de cerrar sesión
       console.log('Sesión cerrada');
     }).catch(error => {
+      this.loadingSrv.dismiss();
       console.error('Error al cerrar sesión:', error);
     });
   }
