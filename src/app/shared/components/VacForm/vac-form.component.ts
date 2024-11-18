@@ -16,6 +16,7 @@ export class FormVacunasComponent {
   @Input() message: string = '';
   @Input() existingVacuna: IVaccine | null = null;
   @Input() petId: string = '';
+  @Input() mode: 'register' | 'update' = 'register';
 
 
   public vacunaForm!: FormGroup;
@@ -79,7 +80,7 @@ export class FormVacunasComponent {
   async openFile(){
     try{
       await FileOpener.openFile({
-        path: this.filePath,
+        path: 'content://com.android.providers.downloads.documents/document/msf%3A1000000073',
       });
     }catch(e){
       console.log('Error al abrir el archivo: ', e);

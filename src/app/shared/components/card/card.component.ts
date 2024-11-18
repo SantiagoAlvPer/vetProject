@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
+import { IonLabel, PopoverController } from '@ionic/angular';
 import { PopoverComponent } from '../popover/popover.component';
 import { Router } from '@angular/router';
 import { LoadingService } from '../../controllers/loading/loading.service';
@@ -35,6 +35,8 @@ export class CardComponent  implements OnInit {
       translucent: true,
       componentProps: {
         options: [
+          { label: 'AddVaccine', value: 'addVaccine', icon: 'create'},
+          { label: 'UpdateVaccine', value: 'updateVaccine', icon: 'create' },
           { label: 'Update', value: 'update', icon: 'create' },
           { label: 'Delete', value: 'delete', icon: 'trash' }
         ],
@@ -61,6 +63,16 @@ export class CardComponent  implements OnInit {
       //Logica delete o funcion delete
       this.loadingSrv.dismiss();
       console.log('Delete task:', pet);
+    } else if(option === 'addVaccine'){
+      this.loadingSrv.show('Logging in...');
+      this.router.navigate(['/vaccine']);
+      this.loadingSrv.dismiss();
+      console.log('Add vacine: ', pet);
+    } else if(option === 'updateVaccine') {
+      this.loadingSrv.show('Logging in...');
+      this.router.navigate(['/update-vaccine']);
+      this.loadingSrv.dismiss();
+      console.log('Update vacine: ', pet);
     }
   }
 }
