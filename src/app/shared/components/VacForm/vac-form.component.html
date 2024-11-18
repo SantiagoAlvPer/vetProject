@@ -2,7 +2,7 @@
 
 <ion-card class="form">
     <ion-card-content class="content">
-      <form [formGroup]="vacunaForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="vacunaForm" (ngSubmit)="handleFormSubmit()">
         <p class="title">{{title}}</p>
         <ion-grid fixed>
           <ion-row>
@@ -12,20 +12,20 @@
           </ion-row>
           <ion-row>
             <ion-col size="6">
-              <ion-label position="floating">Nombre de la Vacuna</ion-label>
-              <app-input label="nombreVacuna" type="text" [fill]="'outline'"  [control]="nombreVacuna"></app-input>
+              <ion-label position="floating"></ion-label>
+              <app-input label="Nombre de la vacuna" type="text" [fill]="'outline'"  [control]="nombreVacuna"></app-input>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col size="4">
-              <ion-label position="floating">Fecha de Vacuna</ion-label>
-              <app-input label="fechaVacunacion" type="text" [fill]="'outline'" [control]="fechaVacunacion"></app-input>
+              <ion-label position="floating"></ion-label>
+              <app-input label="Fecha de vacunacion" type="text" [fill]="'outline'" [control]="fechaVacunacion"></app-input>
             </ion-col>
           </ion-row>
           <ion-row> 
             <ion-col size="4">
-              <ion-label position="floating">Certificado</ion-label>
-              <app-input label="certificado" type="text" [fill]="'outline'" [control]="certificado"></app-input>
+              <ion-label position="floating"></ion-label>
+              <app-input label="Certificado" type="text" [fill]="'outline'" [control]="certificado"></app-input>
             </ion-col>
           </ion-row>
           <ion-row>
