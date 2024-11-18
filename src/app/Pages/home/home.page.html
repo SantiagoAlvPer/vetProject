@@ -5,8 +5,14 @@
       [message]="'Let us know about your little friend!.'">
     </app-pet-form>
 
-    <app-card></app-card>
-    <app-card></app-card>
+    <app-card
+    *ngFor="let pet of pets"
+    [name]="pet.name"
+    [breed]="pet.breed"
+    [age]="pet.age"
+    [birthDate]="pet.birthDate"
+    [image]="pet.image">
+  </app-card>
 
   
 </ion-content>

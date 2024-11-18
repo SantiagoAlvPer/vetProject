@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { IUser } from '../../interfaces/IUser';
 
 
@@ -28,23 +28,23 @@ export class AuthService {
     return this.isAuthenticatedSubject.value;
   }
   
-  // Obtener el usuario autenticado
-  async getCurrentUser(): Promise<firebase.default.User | null> {
-    try {
-      const user = await this.afAuth.currentUser;
-      return user;
-    } catch (error) {
-      console.error('Error obteniendo el usuario autenticado:', error);
-      return null;
+    // Obtener el usuario autenticado
+    async getCurrentUser(): Promise<firebase.default.User | null> {
+      try {
+        const user = await this.afAuth.currentUser;
+        return user;
+      } catch (error) {
+        console.error('Error obteniendo el usuario autenticado:', error);
+        return null;
+      }
     }
-  }
-
-  // Obtener el UID del usuario autenticado
-  async getCurrentUserUID(): Promise<string | null> {
-    const user = await this.getCurrentUser();
-    return user ? user.uid : null; // Si el usuario está autenticado, devuelve el UID, si no, null
-  }
-
+  
+    // Obtener el UID del usuario autenticado
+    getCurrentUserUID(): Observable<string | null> {
+      return this.afAuth.authState.pipe(
+        map(user => user ? user.uid : null) // Devuelve el UID si el usuario está autenticado, o null
+      );
+    }
 
   // Iniciar sesión con correo y contraseña
   async logInWithEmailAndPassword(email: string, password: string): Promise<void> {

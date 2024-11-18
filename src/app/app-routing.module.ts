@@ -17,7 +17,7 @@ const routes: Routes = [
     loadChildren: () => import('./Pages/register/register.module').then( m => m.RegisterPageModule)
   },
   {
-    path: 'update-pet',
+    path: 'update-pet:id',
     loadChildren: () => import('./Pages/updatePet/update-pet/update-pet.module').then( m => m.UpdatePetPageModule)
   },
   {

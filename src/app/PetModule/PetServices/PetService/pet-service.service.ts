@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { catchError, defaultIfEmpty, map, Observable, switchMap } from 'rxjs';
 import { IPet } from 'src/app/shared/interfaces/IPet';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 
@@ -8,69 +9,73 @@ import { AuthService } from 'src/app/shared/services/auth/auth.service';
 })
 export class PetServiceService {
 
+
   constructor(
     private readonly firestore: AngularFirestore,
     private readonly authSvr: AuthService
   ) { }
 
-  async getPetsByUser(): Promise<IPet[]> {
-    try {
-      // Obtener el UID del usuario autenticado
-      const petOwnerID = await this.authSvr.getCurrentUserUID();
-      if (!petOwnerID) {
-        throw new Error('Usuario no autenticado');
-      }
-  
-      // Realizar la consulta a Firestore
-      const querySnapshot = await this.firestore
-        .collection<IPet>('pet', ref => ref.where('petOwnerID', '==', petOwnerID))
-        .get()
-        .toPromise();
-  
-      // Verificar si `querySnapshot` es válido y procesar los documentos
-      if (!querySnapshot || querySnapshot.empty) {
-        console.warn('No se encontraron mascotas para el usuario.');
-        return []; // Retorna un array vacío si no hay documentos
-      }
-  
-      // Mapear los documentos a un array de IPet
-      const pets: IPet[] = querySnapshot.docs.map(doc => ({
-        ...doc.data(),
-        petID: doc.id, // Agregar el ID del documento como petID
-      }));
-  
-      return pets;
-    } catch (error) {
-      console.error('Error al obtener las mascotas del usuario:', error);
-      throw error;
-    }
+  // Obtener una mascota por su ID
+  getPet(petId: string): Observable<IPet | undefined> {
+    return this.firestore.collection('pet').doc<IPet>(petId).valueChanges();
   }
 
-  async addPet(pet: Omit<IPet, 'petID' | 'petOwnerID'>): Promise<void> {
-    try {
-      // Obtener el UID del usuario autenticado
-      const petOwnerID = await this.authSvr.getCurrentUserUID();
-      if (!petOwnerID) {
-        throw new Error('Usuario no autenticado');
-      }
-
-      // Agregar la mascota con el petOwnerID (Firestore generará el petID automáticamente)
-      const petData = {
+  // Actualizar una mascota existente
+  updatePet(petId: string, pet: IPet): Promise<void> {
+    const userId = this.authSvr.getCurrentUserUID();
+    return this.firestore
+      .collection('pet')
+      .doc(petId)
+      .update({
         ...pet,
-        petOwnerID, // Asocia el propietario a la mascota con el UID del usuario autenticado
-      };
-      // Agregar el documento a Firestore y obtener su referencia
-      const docRef = await this.firestore.collection('pet').add(petData);
-
-      // Actualizar el documento con su ID (petID)
-      await docRef.update({ petID: docRef.id });
-
-      // Guardar la mascota en Firestore
-      await this.firestore.collection('pet').add(petData);
-      console.log('Mascota registrada con éxito');
-    } catch (error) {
-      console.error('Error al agregar la mascota:', error);
-      throw error; // Lanza el error para que el componente lo maneje
-    }
+        petOwnerID: userId, // Aseguramos que el ownerID coincida con el del usuario actual
+      });
   }
+  // Método para obtener las mascotas del usuario autenticado en tiempo real
+  getPetsByUser(): Observable<IPet[]> {
+    return this.authSvr.getCurrentUserUID().pipe(
+      switchMap(userId => {
+        if (userId) {
+          return this.firestore
+            .collection<IPet>('pet', ref => ref.where('petOwnerID', '==', userId))
+            .valueChanges();
+        } else {
+          // Si no hay usuario, devolver un observable vacío
+          return new Observable<IPet[]>(subscriber => {
+            subscriber.next([]);
+            subscriber.complete();
+          });
+        }
+      })
+    );
+  }
+
+
+  addPet(pet: Omit<IPet, 'petID' | 'petOwnerID'>): void {
+    this.authSvr.getCurrentUserUID().subscribe({
+      next: (userId) => {
+        if (userId) {
+          const petData = {
+            ...pet,
+            petOwnerID: userId,
+          };
+
+          this.firestore.collection('pet').add(petData).then(docRef => {
+            // Actualizar el documento con el campo `petID` (ID del documento)
+            docRef.update({ petID: docRef.id }).then(() => {
+              console.log('Mascota registrada y petID asignado:', docRef.id);
+            }).catch(updateError => {
+              console.error('Error al asignar petID:', updateError);
+            });
+          }).catch(addError => {
+            console.error('Error al agregar la mascota:', addError);
+          });
+        } else {
+          console.error('Usuario no autenticado, no se puede agregar la mascota');
+        }
+      },
+      error: (error) => console.error('Error obteniendo el UID del usuario:', error),
+    });
+  }
+
 }
