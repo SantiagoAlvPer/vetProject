@@ -1,6 +1,6 @@
 <ion-card class="form" id="scrollable-content">
   <ion-card-content class="content">
-    <form [formGroup]="petForm" (ngSubmit)="registerPet()">
+    <form [formGroup]="petForm" (ngSubmit)="handleFormSubmit()">
       <p class="title">{{title}}</p>
       <ion-grid fixed>
         <ion-row>

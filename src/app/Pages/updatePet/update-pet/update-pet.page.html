@@ -1,10 +1,11 @@
+
 <ion-content [fullscreen]="true">
+  <span class="arrow"><a [routerLink]="['/home']"><ion-icon slot="start" name="arrow-back"></ion-icon></a></span>
 
   <app-pet-form 
-    [title]="'Pet form'" 
-    [message]="'Let us know about your little friend!.'"
-    [mode]="'update'"
-    >
-  </app-pet-form>
-
+  [title]="'Pet form'" 
+  [message]="'Let us know about your little friend!.'"
+  [mode]="'update'"  
+  ></app-pet-form>
+  
 </ion-content>

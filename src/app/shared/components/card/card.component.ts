@@ -3,6 +3,9 @@ import { IonLabel, PopoverController } from '@ionic/angular';
 import { PopoverComponent } from '../popover/popover.component';
 import { Router } from '@angular/router';
 import { LoadingService } from '../../controllers/loading/loading.service';
+import { PetServiceService } from 'src/app/PetModule/PetServices/PetService/pet-service.service';
+import { IPet } from '../../interfaces/IPet';
+import { ToastService } from '../../controllers/toast/toast.service';
 
 @Component({
   selector: 'app-card',
@@ -10,24 +13,35 @@ import { LoadingService } from '../../controllers/loading/loading.service';
   styleUrls: ['./card.component.scss'],
 })
 export class CardComponent  implements OnInit {
+  pets: IPet[] = [];
 
-  @Input() name: string = 'Lulu';
-  @Input() breed: string = 'Singapura';
-  @Input() ege: number = 3;  
-  @Input() birthDay: string = '2001-07-23';  
-  @Input() photo: string = '';
+  @Input() name: string = '';
+  @Input() breed: string = '';
+  @Input() age: string = '';  
+  @Input() birthDate: string = '';  
+  @Input() image: string = '';
 
   constructor(
     private readonly popoverCtrl : PopoverController,
     private router: Router,
-    private loadingSrv: LoadingService
+    private loadingSrv: LoadingService,
+    private readonly petSvr: PetServiceService,
+    private toastSrv: ToastService
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.petSvr.getPetsByUser().subscribe((pets) => {
+      this.pets = pets;
+      });
+  }
 
   async presentPopover(ev: Event) {  
-    const pet = { pet: this.name, description: this.breed }; 
-  
+    const pet = { 
+      petID: this.pets.find((p) => p.name === this.name)?.petID, // Busca el petID correspondiente
+      name: this.name,
+      breed: this.breed 
+    }; 
+    
     const popover = await this.popoverCtrl.create({
       component: PopoverComponent,
       cssClass: 'style-Popover',
@@ -40,7 +54,7 @@ export class CardComponent  implements OnInit {
           { label: 'Update', value: 'update', icon: 'create' },
           { label: 'Delete', value: 'delete', icon: 'trash' }
         ],
-        pet: pet 
+        pet: pet
       }
     });
   
@@ -54,15 +68,20 @@ export class CardComponent  implements OnInit {
 
   handleOptionSelection(option: string, pet: any) {
     if (option === 'update') {
-      this.loadingSrv.show('Logging in...');  
-      this.router.navigate(['/update-pet'], { queryParams: { name: pet.pet, description: pet.description } });
-      this.loadingSrv.dismiss();
+      this.router.navigate(['/update-pet', pet.petID]);
       console.log('Update task:', pet);
     } else if (option === 'delete') {
-      this.loadingSrv.show('Logging in...');  
-      //Logica delete o funcion delete
-      this.loadingSrv.dismiss();
-      console.log('Delete task:', pet);
+      this.loadingSrv.show('Deleting pet...');
+      this.petSvr.deletePet(pet.petID).then(() => {
+        console.log('Pet deleted:', pet);
+        this.pets = this.pets.filter((p) => p.petID !== pet.petID); // Actualiza la lista local
+        this.loadingSrv.dismiss();
+        this.toastSrv.showSuccess('Pet deleted successfully')
+      }).catch((error) => {
+        this.toastSrv.showError('Pet could not be deleted')
+        console.error('Error deleting pet:', error);
+        this.loadingSrv.dismiss();
+      });
     } else if(option === 'addVaccine'){
       this.loadingSrv.show('Logging in...');
       this.router.navigate(['/vaccine']);
