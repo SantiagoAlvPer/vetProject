@@ -15,6 +15,7 @@ export class FormVacunasComponent {
   @Input() title: string = '';
   @Input() message: string = '';
   @Input() existingVacuna: IVaccine | null = null;
+  @Input() petId: string = '';
 
 
   public vacunaForm!: FormGroup;
@@ -33,14 +34,21 @@ export class FormVacunasComponent {
   onSubmit() {
     if (this.vacunaForm.valid) {
       const vaccineData = this.vacunaForm.value;
-      if(this.existingVacuna){
-        //actualiza vacuna
-        this.vaccineService.updateVaccine(this.existingVacuna,vaccineData);
-        console.log("Formulario actualizado: ", vaccineData);
-      } else {
-        //agrega vacuna
-        this.vaccineService.createVaccine(vaccineData);
+      if (this.existingVacuna && this.petId) {
+        // Actualiza la vacuna
+        const index = this.vaccineService.getVaccines(this.petId).findIndex(v => v === this.existingVacuna);
+        if (index !== -1) {
+          this.vaccineService.updateVaccine(this.petId, index, vaccineData);
+          console.log("Formulario actualizado: ", vaccineData);
+        } else {
+          console.log("Error: No se pudo encontrar la vacuna para actualizar.");
+        }
+      } else if (this.petId) {
+        // Agrega vacuna
+        this.vaccineService.createVaccine(this.petId, vaccineData);
         console.log("Formulario enviado: ", vaccineData);
+      } else {
+        console.log("Error: No se proporcionó un ID de mascota.");
       }
     } else {
       console.log('Formulario inválido');
@@ -51,7 +59,7 @@ export class FormVacunasComponent {
   async pickFile(){
     try{
       const result = await FilePicker.pickFiles({
-        types: ['application/pdf'] // Puedes especificar otros tipos si es necesario
+        types: ['application/pdf'] 
       });
 
       if (result.files && result.files.length > 0) {
