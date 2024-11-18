@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/auth/auth.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IUser } from 'src/app/shared/interfaces/IUser';
-import { CameraService } from 'src/app/PetModule/PetServices/Camera/camera.service';
+import { LoadingService } from 'src/app/shared/controllers/loading/loading.service';
+import { LocalNotificationsService } from 'src/app/shared/controllers/localNotificacions/local-notifications.service';
+import { ToastService } from 'src/app/shared/controllers/toast/toast.service';
 
 @Component({
   selector: 'app-register',
@@ -22,10 +24,12 @@ export class RegisterPage implements OnInit {
   public password!: FormControl;
   public signupForm!: FormGroup;
 
-  constructor( 
+  constructor(
     private readonly authSvr: AuthService,
     private readonly router: Router, // Inyectar Router
-    private readonly cameraSrv: CameraService
+    private readonly loadingSrv: LoadingService, // Inyectar LoadingService
+    private readonly localnotiSrv: LocalNotificationsService,
+    private readonly toastSrv: ToastService
   ) {}
 
   ngOnInit() {
@@ -34,6 +38,7 @@ export class RegisterPage implements OnInit {
 
   async onSubmit() {
     if (this.signupForm.valid) {
+      this.loadingSrv.show('Logging in...');  
       const formValues = this.signupForm.value;
 
       // Crear un objeto de usuario SIN la contraseña
@@ -49,26 +54,38 @@ export class RegisterPage implements OnInit {
 
       try {
         // Registrar usuario con Firebase Authentication y almacenar datos en Firestore
-        await this.authSvr.doRegister(formValues.email, formValues.password, userData);
+        await this.authSvr.doRegister(
+          formValues.email,
+          formValues.password,
+          userData
+        );
         console.log('Usuario registrado correctamente');
-
         await this.router.navigate(['/login']);
+        this.loadingSrv.dismiss();
+        this.toastSrv.showSuccess('Te has registrado correctamente!');
+        this.localnotiSrv.showNotification(1, '¡Hola!', 'Gracias por registrarte!');
       } catch (error) {
+        this.loadingSrv.dismiss();
+        this.toastSrv.showError('Algo va mal...');
         console.error('Error al registrar usuario:', error);
         // Manejo de errores comunes
       }
     } else {
-      console.log('Formulario inválido. Por favor, revise los datos.');
+      this.loadingSrv.dismiss();
+      this.toastSrv.showError('Formulario inválido. Por favor, revise los datos.');
     }
   }
 
   onImageUploaded(imageUrl: string) {
     this.signupForm.get('image')?.setValue(imageUrl);
   }
-  
+
   private initForm() {
     this.image = new FormControl('');
-    this.password = new FormControl('',[Validators.required, Validators.minLength(6)]);
+    this.password = new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+    ]);
     this.name = new FormControl('', [Validators.required]);
     this.lastName = new FormControl('', [Validators.required]);
     this.email = new FormControl('', [Validators.required, Validators.email]);
