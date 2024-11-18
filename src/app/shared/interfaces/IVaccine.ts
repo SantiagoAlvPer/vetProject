@@ -1,6 +1,7 @@
 export interface IVaccine {
-    id: string;
+    idVaccine: string;
     name: string;
     applicationDate: string;
     certificate: string;
+    idPet: string;
 }

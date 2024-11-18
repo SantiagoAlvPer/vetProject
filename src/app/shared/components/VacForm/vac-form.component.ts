@@ -31,22 +31,25 @@ export class FormVacunasComponent {
     this.initForm();
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.vacunaForm.valid) {
-      const vaccineData = this.vacunaForm.value;
+      const vaccineData: IVaccine = this.vacunaForm.value;
       if (this.existingVacuna && this.petId) {
-        // Actualiza la vacuna
-        const index = this.vaccineService.getVaccines(this.petId).findIndex(v => v === this.existingVacuna);
-        if (index !== -1) {
-          this.vaccineService.updateVaccine(this.petId, index, vaccineData);
+        // Actualiza la vacuna existente
+        try {
+          await this.vaccineService.updateVaccine(this.petId, this.existingVacuna.idVaccine, vaccineData);
           console.log("Formulario actualizado: ", vaccineData);
-        } else {
-          console.log("Error: No se pudo encontrar la vacuna para actualizar.");
+        } catch (error) {
+          console.error("Error al actualizar la vacuna: ", error);
         }
       } else if (this.petId) {
-        // Agrega vacuna
-        this.vaccineService.createVaccine(this.petId, vaccineData);
-        console.log("Formulario enviado: ", vaccineData);
+        // Agrega una nueva vacuna
+        try {
+          await this.vaccineService.addVaccine(this.petId, vaccineData);
+          console.log("Formulario enviado: ", vaccineData);
+        } catch (error) {
+          console.error("Error al agregar la vacuna: ", error);
+        }
       } else {
         console.log("Error: No se proporcionó un ID de mascota.");
       }

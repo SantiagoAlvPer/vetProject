@@ -1,48 +1,40 @@
 import { Injectable } from '@angular/core';
 import { IVaccine } from '../../interfaces/IVaccine';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VaccineService {
 
-  private petVaccine: Map<string, IVaccine[]> = new Map();
 
   //almacena en un array basado en la interface
   private vaccines: IVaccine[] = [];
 
-  constructor() { }
+  constructor(private readonly fb: AngularFirestore, private readonly auth: AngularFireAuth) { }
 
-  //añade vacuna al array
-  createVaccine(petId: string, vaccines: IVaccine): void{
-    if(!this.petVaccine.has(petId)){
-      this.petVaccine.set(petId, []);
-    }
-    this.petVaccine.get(petId)?.push(vaccines);
+  //añade vacuna por ID de pet
+  async addVaccine(petId: string, data: IVaccine): Promise<void> {
+    const id = this.fb.createId(); 
+    data.idVaccine = id; 
+    return this.fb.collection(`pet/${petId}/vaccine`).doc(id).set(data);
   }
 
-  //devuelve vacunas almacenadas
-  getVaccines(petId: string): IVaccine[]{
-    return this.petVaccine.get(petId) || [];
+  //devuelve todas las vacunas de un pet
+  getVaccines(petId: string) {
+    return this.fb.collection<IVaccine>(`pet/${petId}/vaccine`).valueChanges({ idField: 'id' });
   }
 
-  //actualiza una vacuna en el array solo si existe, sino devuelve False
-  updateVaccine(petId: string, index: number, updatedVaccine: IVaccine): boolean {
-    const vaccines = this.petVaccine.get(petId);
-    if (vaccines && index >= 0 && index < vaccines.length) {
-      vaccines[index] = updatedVaccine;
-      return true;
-    }
-    return false;
+  //actualiza una vacuna por Id de pet e Id de Vaccine
+  updateVaccine(petId: string, vaccineId: string, data: Partial<IVaccine>): Promise<void> {
+    return this.fb.collection(`pet/${petId}/vaccine`).doc(vaccineId).update(data);
   }
 
-  //usa el indice para eliminar vacuna, si indice no es valido o no existe, devuelve False
-  deleteVaccine(petId: string, index: number): boolean {
-    const vaccines = this.petVaccine.get(petId);
-    if (vaccines && index >= 0 && index < vaccines.length) {
-      vaccines.splice(index, 1);
-      return true;
-    }
-    return false;
-  }
+  //elimina vacuna por Id de pet e Id de Vaccine
+  deleteVaccine(petId: string, vaccineId: string): Promise<void> {
+    return this.fb.collection(`pet/${petId}/vaccine`).doc(vaccineId).delete();
+  } 
+    
+  
 }
